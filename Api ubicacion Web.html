@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de ubicación</title>
+</head>
+<body>
+    <h1>Consulta de ubicación</h1>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudadInput" placeholder="Escribe el nombre de la ciudad">
+    <button onclick="obtenerDatosUbicacion()">Consultar</button>
+    <div id="resultado"></div>
+
+    <script>
+        function obtenerDatosUbicacion() {
+            const geonames_username = "migfel"; // Reemplaza con tu API Key de Geonames
+            const lugar = document.getElementById("ciudadInput").value;
+            const url = `http://api.geonames.org/searchJSON?name=${lugar}&maxRows=1&username=${geonames_username}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.geonames && data.geonames) {
+                        const ubicacion = data.geonames[0];
+                        const resultado = `Nombre: ${ubicacion['name']}<br>País: ${ubicacion['countryName']}<br>Población: ${ubicacion['population']}`;
+                        document.getElementById("resultado").innerHTML = resultado;
+                    } else {
+                        document.getElementById("resultado").innerHTML = "Ubicación no encontrada.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("resultado").innerHTML = "Error: " + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
